@@ -5,6 +5,7 @@ import 'package:shipping_clothing_store/core/utils/localization/app_localization
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shipping_clothing_store/presentation/views/getOrder/get_order.dart';
 
 class NavigationMenu extends StatelessWidget {
   const NavigationMenu({super.key});
@@ -27,16 +28,12 @@ class NavigationMenu extends StatelessWidget {
                   : CColors.black.withOpacity(0.1),
               destinations: [
                 NavigationDestination(
-                  icon: Icon(Iconsax.home),
-                  label: 'Chính',
-                ),
-                NavigationDestination(
                   icon: Icon(Iconsax.shop),
-                  label: AppLocalizations.of(context)!.translate('Cửa hàng'),
+                  label: 'Đơn cần lấy',
                 ),
                 NavigationDestination(
-                  icon: Icon(Iconsax.heart),
-                  label: AppLocalizations.of(context)!.translate('Yêu thích'),
+                  icon: Icon(Iconsax.bill),
+                  label: "Đang giao",
                 ),
                 NavigationDestination(
                   icon: Icon(Iconsax.user),
@@ -52,6 +49,7 @@ class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
 
   final screens = [
+    const GetOrderScreen()
     // const HomeScreen(),
     // const StoreScreen(),
     // const FavouriteScreen(),
