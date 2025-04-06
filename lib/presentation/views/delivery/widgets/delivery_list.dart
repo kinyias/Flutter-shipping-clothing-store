@@ -18,159 +18,169 @@ class DeliveryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = CHelperFunctions.isDarkMode(context);
-    return 
-     BlocProvider(
+    return BlocProvider(
         create: (context) => OrderBloc(
-              orderUseCase:
-                  OrderUseCase(OrderRepositoryImpl(OrderApi())),
+              orderUseCase: OrderUseCase(OrderRepositoryImpl(OrderApi())),
             )..add(FetchOrdersByStatus('pickup')),
-        child: 
-    BlocBuilder<OrderBloc, OrderState>(
-      builder: (context, state) {
-        if (state is OrderLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is OrderError) {
-          return Center(
-              child: Text(state.error, style: TextStyle(color: Colors.red)));
-        } else if (state is OrdersLoaded) {
-          return ListView.separated(
-              shrinkWrap: true,
-              itemCount: state.orders.length,
-              separatorBuilder: (_, __) => const SizedBox(
-                    height: CSizes.spaceBtwItems,
-                  ),
-              itemBuilder: (_, index) {
-                final OrderModel order = state.orders[index];
-
-                return CRoundedContainer(
-                  showBorder: true,
-                  padding: EdgeInsets.all(CSizes.md),
-                  backgroundColor: dark ? CColors.dark : CColors.light,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        children: [
-                          // Icon
-                          Icon(Iconsax.ship),
-                          SizedBox(
-                            width: CSizes.spaceBtwItems / 2,
-                          ),
-
-                          // Status and date
-                          Expanded(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  order.status,
-                                  style: Theme.of(context).textTheme.bodyLarge!,
-                                ),
-                                Text(
-                                  CFormatter.formatDate(order.createdAt),
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
-                                )
-                              ],
-                            ),
-                          ),
-
-                          //Icon
-                          IconButton(
-                              onPressed: () => Navigator.pushNamed(
-                                    context,
-                                    '/checkDelivery',
-                                    arguments:
-                                        order,
-                                  ),
-                              icon: Icon(Iconsax.arrow_right_34,
-                                  size: CSizes.iconSm))
-                        ],
-                      ),
-                      const SizedBox(
+        child: BlocBuilder<OrderBloc, OrderState>(
+          builder: (context, state) {
+            if (state is OrderLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is OrderError) {
+              return Center(
+                  child:
+                      Text(state.error, style: TextStyle(color: Colors.red)));
+            } else if (state is OrdersLoaded) {
+              if(state.orders.isEmpty){
+                return Center(child: Text("Chưa có đơn hàng cần giao"));
+              }
+              return ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: state.orders.length,
+                  separatorBuilder: (_, __) => const SizedBox(
                         height: CSizes.spaceBtwItems,
                       ),
-                      Row(
+                  itemBuilder: (_, index) {
+                    final OrderModel order = state.orders[index];
+
+                    return CRoundedContainer(
+                      showBorder: true,
+                      padding: EdgeInsets.all(CSizes.md),
+                      backgroundColor: dark ? CColors.dark : CColors.light,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                // Icon
-                                Icon(Iconsax.tag),
-                                SizedBox(
-                                  width: CSizes.spaceBtwItems / 2,
-                                ),
+                          Row(
+                            children: [
+                              // Icon
+                              Icon(Iconsax.ship),
+                              SizedBox(
+                                width: CSizes.spaceBtwItems / 2,
+                              ),
 
-                                // Status and date
-                                Expanded(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Đơn hàng',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium,
-                                      ),
-                                      Text(
-                                        '#${order.id}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium,
-                                      )
-                                    ],
-                                  ),
+                              // Status and date
+                              Expanded(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      order.status,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!,
+                                    ),
+                                    Text(
+                                      CFormatter.formatDate(order.createdAt),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall,
+                                    )
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+
+                              //Icon
+                              IconButton(
+                                  onPressed: () {
+                                    final result = Navigator.pushNamed(
+                                      context,
+                                      '/checkDelivery',
+                                      arguments: order,
+                                    );
+                                    if (result == true || result == null) {
+                                      context
+                                          .read<OrderBloc>()
+                                          .add(FetchOrdersByStatus('pickup'));
+                                    }
+                                  },
+                                  icon: Icon(Iconsax.arrow_right_34,
+                                      size: CSizes.iconSm))
+                            ],
                           ),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                // Icon
-                                Icon(Iconsax.calendar),
-                                SizedBox(
-                                  width: CSizes.spaceBtwItems / 2,
-                                ),
+                          const SizedBox(
+                            height: CSizes.spaceBtwItems,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    // Icon
+                                    Icon(Iconsax.tag),
+                                    SizedBox(
+                                      width: CSizes.spaceBtwItems / 2,
+                                    ),
 
-                                // Status and date
-                                Expanded(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Ngày giao hàng',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium,
+                                    // Status and date
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Đơn hàng',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium,
+                                          ),
+                                          Text(
+                                            '#${order.id}',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                          )
+                                        ],
                                       ),
-                                      Text(
-                                        CFormatter.formatDate(
-                                            order.deliveredDate),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium,
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    // Icon
+                                    Icon(Iconsax.calendar),
+                                    SizedBox(
+                                      width: CSizes.spaceBtwItems / 2,
+                                    ),
+
+                                    // Status and date
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Ngày giao hàng',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium,
+                                          ),
+                                          Text(
+                                            CFormatter.formatDate(
+                                                order.deliveredDate),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
                           )
                         ],
-                      )
-                    ],
-                  ),
-                );
-              });
-        }
-        return const SizedBox.shrink();
-      },
-    )
-  );}
+                      ),
+                    );
+                  });
+            }
+            return const SizedBox.shrink();
+          },
+        ));
+  }
 }

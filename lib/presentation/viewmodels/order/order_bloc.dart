@@ -53,6 +53,7 @@ Future<void> _onUpdatePickupOrder(
     UpdatePickupOrder event,
     Emitter<OrderState> emit,
   ) async {
+    emit(OrderLoading());
     try {
       String? imageUrl = await orderUseCase.uploadImageToCloudinary(event.imageFile);
       OrderResponse orderResponse = await orderUseCase.updateOrderPickupStatus(event.orderId, 'pickup', event.userId, imageUrl!);
@@ -70,6 +71,7 @@ Future<void> _onUpdatePickupOrder(
     UpdateDeliveredOrder event,
     Emitter<OrderState> emit,
   ) async {
+    emit(OrderLoading());
     try {
       String? imageUrl = await orderUseCase.uploadImageToCloudinary(event.imageFile);
       OrderResponse orderResponse = await orderUseCase.updateOrderDeliveredStatus(event.orderId, 'delivered', imageUrl!);

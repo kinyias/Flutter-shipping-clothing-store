@@ -10,7 +10,7 @@ class DeliveryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CAppBar(
-        title: Text('Đơn hàng cân giao',
+        title: Text('Đơn hàng cần giao',
             style: Theme.of(context).textTheme.headlineMedium),
       ),
        body: SingleChildScrollView(

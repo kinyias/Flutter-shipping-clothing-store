@@ -11,6 +11,4 @@ abstract class OrderRepository {
   Future<OrderResponse> updateOrderPickupStatus(int orderId, String status, int userId, String imagePickup);
   Future<OrderResponse> updateOrderDeliveredStatus(int orderId, String status, String imageDelivered);
   Future<OrderItemResponse> getOrderItemsByOrderId(int orderId);
-  // Future<OrderResponse> getOrder(OrderModel order);
-  // Future<OrderResponse> getAllOrder(OrderModel order);
 }

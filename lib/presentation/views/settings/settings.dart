@@ -3,6 +3,8 @@ import 'package:shipping_clothing_store/data/account/repositories/user_repositor
 import 'package:shipping_clothing_store/data/account/sources/user_api.dart';
 import 'package:shipping_clothing_store/domain/account/usecases/user_usecase.dart';
 import 'package:shipping_clothing_store/presentation/viewmodels/account/user_bloc.dart';
+import 'package:shipping_clothing_store/presentation/views/completed/completed.dart';
+import 'package:shipping_clothing_store/presentation/views/delivered/delivered.dart';
 import 'package:shipping_clothing_store/presentation/views/delivery/delivery.dart';
 import 'package:shipping_clothing_store/presentation/views/getOrder/get_order.dart';
 import 'package:shipping_clothing_store/presentation/views/profile/profile.dart';
@@ -95,6 +97,16 @@ class SettingsScreen extends StatelessWidget {
                                 title: 'Đơn hàng cần giao',
                                 subTitle: 'Danh sách đơn hàng cần giao',
                                 onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> DeliveryScreen()))),
+                            SettingsMenuTile(
+                                icon: Iconsax.bag_tick,
+                                title: 'Đơn hàng đã giao',
+                                subTitle: 'Danh sách đơn hàng đã giao',
+                                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> DeliveredScreen()))),
+                            SettingsMenuTile(
+                                icon: Iconsax.tick_circle,
+                                title: 'Đơn hàng đã hoàn thành',
+                                subTitle: 'Danh sách đơn hàng đã hoàn thành',
+                                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> CompletedScreen()))),
 
                             //Logout button
                             const SizedBox(

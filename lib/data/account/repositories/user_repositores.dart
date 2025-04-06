@@ -1,5 +1,4 @@
 
-import 'package:shipping_clothing_store/data/account/models/user_model.dart';
 import 'package:shipping_clothing_store/domain/account/entities/user_response.dart';
 import 'package:shipping_clothing_store/domain/account/repositories/user_repository.dart';
 

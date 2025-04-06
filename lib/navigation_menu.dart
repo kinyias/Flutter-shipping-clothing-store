@@ -5,8 +5,8 @@ import 'package:shipping_clothing_store/core/utils/localization/app_localization
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shipping_clothing_store/presentation/views/delivered/delivered.dart';
 import 'package:shipping_clothing_store/presentation/views/delivery/delivery.dart';
-import 'package:shipping_clothing_store/presentation/views/delivery/widgets/delivery_list.dart';
 import 'package:shipping_clothing_store/presentation/views/getOrder/get_order.dart';
 import 'package:shipping_clothing_store/presentation/views/settings/settings.dart';
 
@@ -36,7 +36,11 @@ class NavigationMenu extends StatelessWidget {
                 ),
                 NavigationDestination(
                   icon: Icon(Iconsax.bill),
-                  label: "Đang giao",
+                  label: "Đơn đang giao",
+                ),
+                NavigationDestination(
+                  icon: Icon(Iconsax.bag_tick),
+                  label: "Đơn đã giao",
                 ),
                 NavigationDestination(
                   icon: Icon(Iconsax.user),
@@ -54,10 +58,7 @@ class NavigationController extends GetxController {
   final screens = [
     const GetOrderScreen(),
     const DeliveryScreen(),
+    const DeliveredScreen(),
     const SettingsScreen(),
-    // const HomeScreen(),
-    // const StoreScreen(),
-    // const FavouriteScreen(),
-    // const SettingsScreen(),
   ];
 }

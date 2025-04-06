@@ -12,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 
-class DeliveredList extends StatelessWidget {
-  const DeliveredList({super.key});
+class CompletedList extends StatelessWidget {
+  const CompletedList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class DeliveredList extends StatelessWidget {
         create: (context) => OrderBloc(
               orderUseCase:
                   OrderUseCase(OrderRepositoryImpl(OrderApi())),
-            )..add(FetchOrdersByStatus('delivered')),
+            )..add(FetchOrdersByStatus('completed')),
         child: 
     BlocBuilder<OrderBloc, OrderState>(
       builder: (context, state) {
@@ -33,9 +33,9 @@ class DeliveredList extends StatelessWidget {
           return Center(
               child: Text(state.error, style: TextStyle(color: Colors.red)));
         } else if (state is OrdersLoaded) {
-          if(state.orders.isEmpty){
-            return Center(child: Text('Chưa có đơn hàng đã giao lúc này'),);
-          }
+                if(state.orders.isEmpty){
+                  return Center(child: Text('Chưa có đơn hàng hoàn thành'),);
+                }
           return ListView.separated(
               shrinkWrap: true,
               itemCount: state.orders.length,

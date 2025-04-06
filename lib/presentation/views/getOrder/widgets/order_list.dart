@@ -31,6 +31,9 @@ class OrderList extends StatelessWidget {
                   child:
                       Text(state.error, style: TextStyle(color: Colors.red)));
             } else if (state is OrdersLoaded) {
+              if(state.orders.isEmpty){
+                return Center(child: Text('Chưa có đơn hàng cần giao'),);
+              }
               return ListView.separated(
                   shrinkWrap: true,
                   itemCount: state.orders.length,
@@ -93,10 +96,10 @@ class OrderList extends StatelessWidget {
 
                                       // If result is true (successful update) or no specific result
                                       // refresh the order list
-                                      if (result == true || result == null) {
-                                        context.read<OrderBloc>().add(
-                                            FetchOrdersByStatus('ordered'));
-                                      }
+                                    if (result == true || result == null) {
+                                      context.read<OrderBloc>().add(
+                                          FetchOrdersByStatus('ordered'));
+                                    }
                                     },
                                     icon: Icon(Iconsax.arrow_right_34,
                                         size: CSizes.iconSm))
