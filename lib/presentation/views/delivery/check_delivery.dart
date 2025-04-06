@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,15 +18,15 @@ import 'package:shipping_clothing_store/presentation/views/getOrder/widgets/orde
 import 'package:shipping_clothing_store/presentation/widgets/appbar/appbar.dart';
 import 'package:shipping_clothing_store/presentation/widgets/texts/section_heading.dart';
 
-class CheckGetOrderScreen extends StatefulWidget {
-  const CheckGetOrderScreen({super.key, required this.order});
+class CheckDeliveryScreen extends StatefulWidget {
+  const CheckDeliveryScreen({super.key, required this.order});
   final OrderModel order;
 
   @override
-  State<CheckGetOrderScreen> createState() => _CheckGetOrderScreenState();
+  State<CheckDeliveryScreen> createState() => _CheckDeliveryScreenState();
 }
 
-class _CheckGetOrderScreenState extends State<CheckGetOrderScreen> {
+class _CheckDeliveryScreenState extends State<CheckDeliveryScreen> {
   File? _selectedImage;
 
   Future<void> _pickOrCaptureImage(BuildContext context) async {
@@ -90,7 +91,7 @@ class _CheckGetOrderScreenState extends State<CheckGetOrderScreen> {
         listener: (context, state) {
           if (state is UpdateStatusSuccess) {
             // Show success message and navigate back with refresh flag
-            Loaders.sucessToast(message: "Xác nhận lấy hàng thành công", context: context);
+            Loaders.sucessToast(message: "Xác nhận giao hàng thành công", context: context);
             Navigator.of(context).pop(true); // Pass true to indicate successful update
           } else if (state is OrderError) {
             // Show error message
@@ -102,7 +103,7 @@ class _CheckGetOrderScreenState extends State<CheckGetOrderScreen> {
         child: Scaffold(
           appBar: CAppBar(
             showBackArrow: true,
-            title: Text('Xác nhận lấy hàng',
+            title: Text('Xác nhận đã giao hàng',
                 style: Theme.of(context).textTheme.headlineMedium),
           ),
           body: SingleChildScrollView(
@@ -148,7 +149,7 @@ class _CheckGetOrderScreenState extends State<CheckGetOrderScreen> {
                             OrderItems(orderItems: state.order.data),
                             SizedBox(height: CSizes.spaceBtwItems,),
                             Text("Cần thanh toán: ${CFormatter.formatCurrency(widget.order.total)}", style: Theme.of(context).textTheme.titleLarge,),
-                             SizedBox(height: CSizes.spaceBtwItems,),
+                            SizedBox(height: CSizes.spaceBtwSections),
                             CSectionHeading(
                               title: 'Xác nhận hình ảnh',
                               showActionButton: false,
@@ -206,7 +207,7 @@ class _CheckGetOrderScreenState extends State<CheckGetOrderScreen> {
                       ? null
                       : () {
                           context.read<OrderBloc>().add(
-                            UpdatePickupOrder(_selectedImage!, widget.order.id, CLocalStorage().readData('userId')),
+                            UpdateDeliveredOrder(_selectedImage!, widget.order.id),
                           );
                         },
                   child: state is OrderLoading

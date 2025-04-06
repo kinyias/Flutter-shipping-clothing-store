@@ -28,6 +28,23 @@ class FetchOrdersByStatus extends OrderEvent {
   @override
   List<Object> get props => [status];
 }
+class UpdatePickupOrder extends OrderEvent {
+  final File imageFile;
+  final int orderId;
+  final int userId;
+  const UpdatePickupOrder(this.imageFile, this.orderId, this.userId);
+
+  @override
+  List<Object> get props => [imageFile];
+}
+class UpdateDeliveredOrder extends OrderEvent {
+  final File imageFile;
+  final int orderId;
+  const UpdateDeliveredOrder(this.imageFile, this.orderId);
+
+  @override
+  List<Object> get props => [imageFile];
+}
 class GetOrderDetail extends OrderEvent {
   final int orderId;
 

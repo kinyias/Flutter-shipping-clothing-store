@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:shipping_clothing_store/core/constants/sizes.dart';
+import 'package:shipping_clothing_store/presentation/views/delivery/widgets/delivery_list.dart';
 import 'package:shipping_clothing_store/presentation/widgets/appbar/appbar.dart';
-import 'package:shipping_clothing_store/presentation/views/getOrder/widgets/order_list.dart';
 
-class GetOrderScreen extends StatelessWidget {
-  const GetOrderScreen({super.key});
+class DeliveredScreen extends StatelessWidget {
+  const DeliveredScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CAppBar(
-        title: Text('Đơn hàng cần lấy',
+        title: Text('Đơn hàng cân giao',
             style: Theme.of(context).textTheme.headlineMedium),
       ),
-      body: Padding(
+       body: SingleChildScrollView(
+        child: Padding(
           padding: EdgeInsets.all(CSizes.defaultSpace),
           child:
-              //Orders
-              OrderList(),
+              //delivery
+              DeliveryList(),
         ),
-      
+      ),
     );
   }
 }

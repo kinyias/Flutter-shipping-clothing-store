@@ -18,6 +18,14 @@ class OrderRepositoryImpl implements OrderRepository {
     return await orderApi.fetchOrdersByStatus(status);
   }
    @override
+  Future<OrderResponse> updateOrderPickupStatus(int orderId, String status, int userId, String imagePickup) async {
+    return await orderApi.updateOrderPickupStatus(orderId, status, userId, imagePickup);
+  }
+   @override
+  Future<OrderResponse> updateOrderDeliveredStatus(int orderId, String status, String imageDelivered) async {
+    return await orderApi.updateOrderDeliveredStatus(orderId, status, imageDelivered);
+  }
+   @override
    Future<OrderItemResponse> getOrderItemsByOrderId(int orderId) async {
     return await orderApi.fetchOrderItemsByOrderId(orderId);
   }

@@ -5,7 +5,10 @@ import 'package:shipping_clothing_store/core/utils/localization/app_localization
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shipping_clothing_store/presentation/views/delivery/delivery.dart';
+import 'package:shipping_clothing_store/presentation/views/delivery/widgets/delivery_list.dart';
 import 'package:shipping_clothing_store/presentation/views/getOrder/get_order.dart';
+import 'package:shipping_clothing_store/presentation/views/settings/settings.dart';
 
 class NavigationMenu extends StatelessWidget {
   const NavigationMenu({super.key});
@@ -49,7 +52,9 @@ class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
 
   final screens = [
-    const GetOrderScreen()
+    const GetOrderScreen(),
+    const DeliveryScreen(),
+    const SettingsScreen(),
     // const HomeScreen(),
     // const StoreScreen(),
     // const FavouriteScreen(),

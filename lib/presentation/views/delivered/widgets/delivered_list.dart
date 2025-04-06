@@ -12,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 
-class DeliveryList extends StatelessWidget {
-  const DeliveryList({super.key});
+class DeliveredList extends StatelessWidget {
+  const DeliveredList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class DeliveryList extends StatelessWidget {
         create: (context) => OrderBloc(
               orderUseCase:
                   OrderUseCase(OrderRepositoryImpl(OrderApi())),
-            )..add(FetchOrdersByStatus('pickup')),
+            )..add(FetchOrdersByStatus('delivered')),
         child: 
     BlocBuilder<OrderBloc, OrderState>(
       builder: (context, state) {
@@ -80,7 +80,7 @@ class DeliveryList extends StatelessWidget {
                           IconButton(
                               onPressed: () => Navigator.pushNamed(
                                     context,
-                                    '/checkDelivery',
+                                    '/deliveredDetail',
                                     arguments:
                                         order,
                                   ),

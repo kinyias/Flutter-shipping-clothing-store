@@ -3,6 +3,8 @@ import 'package:shipping_clothing_store/data/account/repositories/user_repositor
 import 'package:shipping_clothing_store/data/account/sources/user_api.dart';
 import 'package:shipping_clothing_store/domain/account/usecases/user_usecase.dart';
 import 'package:shipping_clothing_store/presentation/viewmodels/account/user_bloc.dart';
+import 'package:shipping_clothing_store/presentation/views/delivery/delivery.dart';
+import 'package:shipping_clothing_store/presentation/views/getOrder/get_order.dart';
 import 'package:shipping_clothing_store/presentation/views/profile/profile.dart';
 import 'package:shipping_clothing_store/presentation/views/settings/widgets/settings_menu_tile.dart';
 import 'package:shipping_clothing_store/presentation/views/settings/widgets/user_profile_tile.dart';
@@ -78,21 +80,21 @@ class SettingsScreen extends StatelessWidget {
                               height: CSizes.spaceBtwItems,
                             ),
 
-                            // SettingsMenuTile(
-                            //     icon: Iconsax.safe_home,
-                            //     title: 'Địa chỉ',
-                            //     subTitle: 'Cài đặt địa chỉ giao hàng',
-                            //     onTap: () => Navigator.push(
-                            //           context,
-                            //           MaterialPageRoute(
-                            //               builder: (context) =>
-                            //                   UserAddressScreen()),
-                            //         )),
-                            // SettingsMenuTile(
-                            //     icon: Iconsax.shopping_cart,
-                            //     title: 'Giỏ hàng',
-                            //     subTitle: 'Thêm, xoá sản phẩm trong giỏ hàng',
-                            //     onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> PaymentTestScreen()))),
+                            SettingsMenuTile(
+                                icon: Iconsax.shop,
+                                title: 'Đơn hàng cần lấy',
+                                subTitle: 'Danh sách đơn hàng cần lấy hàng',
+                                onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              GetOrderScreen()),
+                                    )),
+                            SettingsMenuTile(
+                                icon: Iconsax.bill,
+                                title: 'Đơn hàng cần giao',
+                                subTitle: 'Danh sách đơn hàng cần giao',
+                                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> DeliveryScreen()))),
 
                             //Logout button
                             const SizedBox(

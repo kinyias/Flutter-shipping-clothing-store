@@ -1,5 +1,6 @@
 import 'package:shipping_clothing_store/data/order/models/order_model.dart';
 import 'package:shipping_clothing_store/navigation_menu.dart';
+import 'package:shipping_clothing_store/presentation/views/delivery/check_delivery.dart';
 import 'package:shipping_clothing_store/presentation/views/getOrder/check_get_order.dart';
 import 'package:shipping_clothing_store/presentation/views/login/login.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           '/checkGetOrder': (context) {
       final order = ModalRoute.of(context)!.settings.arguments as OrderModel;
       return CheckGetOrderScreen(order: order); 
+    },
+          '/checkDelivery': (context) {
+      final order = ModalRoute.of(context)!.settings.arguments as OrderModel;
+      return CheckDeliveryScreen(order: order); 
     },
         },
         debugShowCheckedModeBanner: false, //DEBUG clóe 

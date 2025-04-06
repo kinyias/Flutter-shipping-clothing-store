@@ -1,4 +1,6 @@
 // bloc/order_bloc.dart
+import 'dart:io';
+
 import 'package:shipping_clothing_store/data/order/models/order_model.dart';
 import 'package:shipping_clothing_store/domain/order/entites/order_item_response.dart';
 import 'package:shipping_clothing_store/domain/order/entites/order_repsonse.dart';
@@ -15,6 +17,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   OrderBloc({required this.orderUseCase}) : super(OrderInitial()) {
     on<FetchOrdersEvent>(_onFetchOrders);
     on<FetchOrdersByStatus>(_onFetchOrdersByStatus);
+    on<UpdatePickupOrder>(_onUpdatePickupOrder);
+    on<UpdateDeliveredOrder>(_onUpdateDeliveredOrder);
     on<FetchUserOrders>(_onFetchUserOrders);
     on<GetOrderDetail>(_onGetOrderDetails);
   }
@@ -45,7 +49,40 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       emit(OrderError(e.toString()));
     }
   }
-
+Future<void> _onUpdatePickupOrder(
+    UpdatePickupOrder event,
+    Emitter<OrderState> emit,
+  ) async {
+    try {
+      String? imageUrl = await orderUseCase.uploadImageToCloudinary(event.imageFile);
+      OrderResponse orderResponse = await orderUseCase.updateOrderPickupStatus(event.orderId, 'pickup', event.userId, imageUrl!);
+      if(orderResponse.success){
+      emit(UpdateStatusSuccess());
+      }
+      else{
+         emit(UpdateStatusFail());
+      }
+    } catch (e) {
+      emit(OrderError(e.toString()));
+    }
+  }
+  Future<void> _onUpdateDeliveredOrder(
+    UpdateDeliveredOrder event,
+    Emitter<OrderState> emit,
+  ) async {
+    try {
+      String? imageUrl = await orderUseCase.uploadImageToCloudinary(event.imageFile);
+      OrderResponse orderResponse = await orderUseCase.updateOrderDeliveredStatus(event.orderId, 'delivered', imageUrl!);
+      if(orderResponse.success){
+      emit(UpdateStatusSuccess());
+      }
+      else{
+         emit(UpdateStatusFail());
+      }
+    } catch (e) {
+      emit(OrderError(e.toString()));
+    }
+  }
   Future<void> _onFetchOrdersByStatus(
     FetchOrdersByStatus event,
     Emitter<OrderState> emit,

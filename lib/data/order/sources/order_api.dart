@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:shipping_clothing_store/core/utils/http/http_client.dart';
 import 'package:shipping_clothing_store/core/utils/local_storage/storage_utility.dart';
-import 'package:shipping_clothing_store/data/order/models/order_item_model.dart';
 import 'package:shipping_clothing_store/data/order/models/order_model.dart';
 import 'package:shipping_clothing_store/domain/order/entites/list_order_response.dart';
 import 'package:shipping_clothing_store/domain/order/entites/order_item_response.dart';
@@ -20,15 +19,53 @@ class OrderApi {
       throw Exception("Failed to load orders");
     }
   }
-  Future<List<OrderModel>> fetchOrdersByStatus(String status) async {
-    final response = await CHttpHelper.get('api/v1/orders/status?status=$status');
 
-   if (response.statusCode == 200) {
+  Future<List<OrderModel>> fetchOrdersByStatus(String status) async {
+    final response =
+        await CHttpHelper.get('api/v1/orders/status?status=$status');
+    print(response.body);
+    if (response.statusCode == 200) {
       return ListOrderResponse.fromJson(jsonDecode(response.body)).data;
     } else {
       throw Exception("Failed to load orders by status");
     }
   }
+
+  Future<OrderResponse> updateOrderPickupStatus(int orderId, String status,
+      int userId, String? imagePickup,) async {
+    final response = await CHttpHelper.put(
+        'api/v1/orders/$orderId/status', {'status': status});
+    if (response.statusCode == 200) {
+      if (status.toLowerCase() == 'pickup') {
+        final responsePickup = await CHttpHelper.post('api/v1/deliveries',
+            {'order_id': orderId, 'user_id': userId, 'image_pickup': imagePickup});
+        if (responsePickup.statusCode != 201) {
+          throw Exception("Failed to create delivery: $responsePickup");
+        }
+      }
+      return OrderResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("Failed to update status order");
+    }
+  }
+  Future<OrderResponse> updateOrderDeliveredStatus(int orderId, String status,
+     String? imagePickup,) async {
+    final response = await CHttpHelper.put(
+        'api/v1/orders/$orderId/status', {'status': status});
+    if (response.statusCode == 200) {
+      if (status.toLowerCase() == 'delivered') {
+        final responsePickup = await CHttpHelper.put('api/v1/deliveries/order/$orderId',
+            { 'image_delivered': imagePickup});
+        if (responsePickup.statusCode != 200) {
+          throw Exception("Failed to update delivery: ${responsePickup.body}");
+        }
+      }
+      return OrderResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("Failed to update status order");
+    }
+  }
+
   Future<OrderItemResponse> fetchOrderItemsByOrderId(int orderId) async {
     final response =
         await CHttpHelper.get('api/v1/orders/$orderId/order-items');

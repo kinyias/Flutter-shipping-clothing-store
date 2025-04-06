@@ -10,6 +10,8 @@ abstract class OrderState extends Equatable {
 class OrderInitial extends OrderState {}
 
 class OrderLoading extends OrderState {}
+class UpdateStatusSuccess extends OrderState {}
+class UpdateStatusFail extends OrderState {}
 
 class OrderCreated extends OrderState {
   final OrderResponse response;

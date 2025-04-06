@@ -18,86 +18,42 @@ class OrderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = CHelperFunctions.isDarkMode(context);
-    return 
-     BlocProvider(
+    return BlocProvider(
         create: (context) => OrderBloc(
-              orderUseCase:
-                  OrderUseCase(OrderRepositoryImpl(OrderApi())),
+              orderUseCase: OrderUseCase(OrderRepositoryImpl(OrderApi())),
             )..add(FetchOrdersByStatus('ordered')),
-        child: 
-    BlocBuilder<OrderBloc, OrderState>(
-      builder: (context, state) {
-        if (state is OrderLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is OrderError) {
-          return Center(
-              child: Text(state.error, style: TextStyle(color: Colors.red)));
-        } else if (state is OrdersLoaded) {
-          return ListView.separated(
-              shrinkWrap: true,
-              itemCount: state.orders.length,
-              separatorBuilder: (_, __) => const SizedBox(
-                    height: CSizes.spaceBtwItems,
-                  ),
-              itemBuilder: (_, index) {
-                final OrderModel order = state.orders[index];
-
-                return CRoundedContainer(
-                  showBorder: true,
-                  padding: EdgeInsets.all(CSizes.md),
-                  backgroundColor: dark ? CColors.dark : CColors.light,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        children: [
-                          // Icon
-                          Icon(Iconsax.ship),
-                          SizedBox(
-                            width: CSizes.spaceBtwItems / 2,
-                          ),
-
-                          // Status and date
-                          Expanded(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  order.status,
-                                  style: Theme.of(context).textTheme.bodyLarge!,
-                                ),
-                                Text(
-                                  CFormatter.formatDate(order.createdAt),
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
-                                )
-                              ],
-                            ),
-                          ),
-
-                          //Icon
-                          IconButton(
-                              onPressed: () => Navigator.pushNamed(
-                                    context,
-                                    '/checkGetOrder',
-                                    arguments:
-                                        order,
-                                  ),
-                              icon: Icon(Iconsax.arrow_right_34,
-                                  size: CSizes.iconSm))
-                        ],
-                      ),
-                      const SizedBox(
+        child: BlocBuilder<OrderBloc, OrderState>(
+          builder: (context, state) {
+            if (state is OrderLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is OrderError) {
+              return Center(
+                  child:
+                      Text(state.error, style: TextStyle(color: Colors.red)));
+            } else if (state is OrdersLoaded) {
+              return ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: state.orders.length,
+                  separatorBuilder: (_, __) => const SizedBox(
                         height: CSizes.spaceBtwItems,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Row(
+                  itemBuilder: (_, index) {
+
+                    if (state.orders.isEmpty) {
+                      return Center(child: Text('Chưa có đơn hàng cần lấy'));
+                    } else {
+                      final OrderModel order = state.orders[index];
+                      return CRoundedContainer(
+                        showBorder: true,
+                        padding: EdgeInsets.all(CSizes.md),
+                        backgroundColor: dark ? CColors.dark : CColors.light,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
                               children: [
                                 // Icon
-                                Icon(Iconsax.tag),
+                                Icon(Iconsax.ship),
                                 SizedBox(
                                   width: CSizes.spaceBtwItems / 2,
                                 ),
@@ -110,67 +66,126 @@ class OrderList extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Đơn hàng',
+                                        order.status,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .labelMedium,
+                                            .bodyLarge!,
                                       ),
                                       Text(
-                                        '#${order.id}',
+                                        CFormatter.formatDate(order.createdAt),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .titleMedium,
+                                            .headlineSmall,
                                       )
                                     ],
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                // Icon
-                                Icon(Iconsax.calendar),
-                                SizedBox(
-                                  width: CSizes.spaceBtwItems / 2,
                                 ),
 
-                                // Status and date
+                                //Icon
+                                IconButton(
+                                    onPressed: () async {
+                                      // Wait for navigation result
+                                      final result = await Navigator.pushNamed(
+                                        context,
+                                        '/checkGetOrder',
+                                        arguments: order,
+                                      );
+
+                                      // If result is true (successful update) or no specific result
+                                      // refresh the order list
+                                      if (result == true || result == null) {
+                                        context.read<OrderBloc>().add(
+                                            FetchOrdersByStatus('ordered'));
+                                      }
+                                    },
+                                    icon: Icon(Iconsax.arrow_right_34,
+                                        size: CSizes.iconSm))
+                              ],
+                            ),
+                            const SizedBox(
+                              height: CSizes.spaceBtwItems,
+                            ),
+                            Row(
+                              children: [
                                 Expanded(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  child: Row(
                                     children: [
-                                      Text(
-                                        'Ngày giao hàng',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium,
+                                      // Icon
+                                      Icon(Iconsax.tag),
+                                      SizedBox(
+                                        width: CSizes.spaceBtwItems / 2,
                                       ),
-                                      Text(
-                                        CFormatter.formatDate(
-                                            order.deliveredDate),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium,
-                                      )
+
+                                      // Status and date
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Đơn hàng',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .labelMedium,
+                                            ),
+                                            Text(
+                                              '#${order.id}',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium,
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      // Icon
+                                      Icon(Iconsax.calendar),
+                                      SizedBox(
+                                        width: CSizes.spaceBtwItems / 2,
+                                      ),
+
+                                      // Status and date
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Ngày giao hàng',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .labelMedium,
+                                            ),
+                                            Text(
+                                              CFormatter.formatDate(
+                                                  order.deliveredDate),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
                               ],
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                );
-              });
-        }
-        return const SizedBox.shrink();
-      },
-    )
-  );}
+                            )
+                          ],
+                        ),
+                      );
+                    }
+                  });
+            }
+            return const SizedBox.shrink();
+          },
+        ));
+  }
 }

@@ -16,8 +16,7 @@ class OrderItems extends StatelessWidget {
         return Column(
           children: [
             OrderItem(orderItem: orderItem),
-            const SizedBox(height: CSizes.spaceBtwItems),
-            if (index < 9) const SizedBox(height: CSizes.spaceBtwSections),
+            // if (index < 9) const SizedBox(height: CSizes.spaceBtwSections),
           ],
         );
       }),
