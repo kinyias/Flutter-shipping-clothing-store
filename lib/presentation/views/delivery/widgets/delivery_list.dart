@@ -82,8 +82,8 @@ class DeliveryList extends StatelessWidget {
 
                               //Icon
                               IconButton(
-                                  onPressed: () {
-                                    final result = Navigator.pushNamed(
+                                  onPressed:  () async{
+                                    final result = await Navigator.pushNamed(
                                       context,
                                       '/checkDelivery',
                                       arguments: order,

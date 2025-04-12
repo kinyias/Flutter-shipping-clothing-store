@@ -14,14 +14,14 @@ class DeliveredScreen extends StatelessWidget {
         title: Text('Đơn hàng đã giao',
             style: Theme.of(context).textTheme.headlineMedium),
       ),
-       body: SingleChildScrollView(
-        child: Padding(
+       body: 
+        Padding(
           padding: EdgeInsets.all(CSizes.defaultSpace),
           child:
               //delivery
               DeliveredList(),
         ),
-      ),
+    
     );
   }
 }

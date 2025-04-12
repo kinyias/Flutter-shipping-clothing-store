@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 class CHttpHelper {
   //on dev mode use http://localhost:8000 on Flutter web and http://10.0.2.2:8000 on flutter mobile
   // static const String _baseUrl = 'http://localhost:8000';
-  static const String _baseUrl = 'http://10.0.2.2:8000';
+  // static const String _baseUrl = 'http://10.0.2.2:8000';
+  static const String _baseUrl = 'https://clothing-store-laravel-production.up.railway.app';
 
   static Future<http.Response> get(String endpoint, {String? token}) async {
     try {

@@ -13,14 +13,12 @@ class DeliveryScreen extends StatelessWidget {
         title: Text('Đơn hàng cần giao',
             style: Theme.of(context).textTheme.headlineMedium),
       ),
-       body: SingleChildScrollView(
-        child: Padding(
+       body: Padding(
           padding: EdgeInsets.all(CSizes.defaultSpace),
           child:
               //delivery
               DeliveryList(),
         ),
-      ),
     );
   }
 }
